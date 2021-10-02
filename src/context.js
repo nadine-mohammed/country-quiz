@@ -38,7 +38,7 @@ export const AppProvider = ({ children }) => {
 
   const fetchCountries = async () => {
     try {
-      const response = await fetch("https://restcountries.eu/rest/v2/all");
+      const response = await fetch("https://restcountries.com/v3.1/all");
       const data = await response.json();
       let countries = data.filter((country, idx) => {
         return idx != 111;
@@ -169,7 +169,7 @@ export const AppProvider = ({ children }) => {
         correctAnswerIdx,
         totalScore,
         setTotalScore,
-        getQuestions
+        getQuestions,
       }}
     >
       {children}
