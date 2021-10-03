@@ -119,7 +119,7 @@ const Question = () => {
                   }}
                 >
                   <div className="option-letter">{letters[idx]}</div>
-                  <div className="option-text">{option.common}</div>
+                  <div className="option-text">{option}</div>
                 </button>
               );
             })}

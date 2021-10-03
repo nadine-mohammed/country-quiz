@@ -14,7 +14,6 @@ export const AppProvider = ({ children }) => {
   const [quizQuestions, setQuizQuestions] = useState([]);
 
   useEffect(() => {
-    console.log("fetch countries");
     fetchCountries();
   }, []);
 
@@ -41,7 +40,7 @@ export const AppProvider = ({ children }) => {
       const response = await fetch("https://restcountries.com/v3.1/all");
       const data = await response.json();
       let countries = data.filter((country, idx) => {
-        return idx != 111;
+        return country.area != 20770;
       });
       setCountries(countries);
     } catch (e) {
@@ -62,18 +61,22 @@ export const AppProvider = ({ children }) => {
       }
       if (i === 1) {
         qQuestions.push(
-          `What is the most spoken language in ${countries[cntIdx].name}`
+          `What is the most spoken language in ${countries[cntIdx].name.common}`
         );
       }
       if (i === 2) {
-        setFlagSrc(countries[cntIdx].flag);
+        setFlagSrc(countries[cntIdx].flags.svg);
         qQuestions.push(`Which country does this flag belong to`);
       }
       if (i === 3) {
-        qQuestions.push(`Which currency is used in ${countries[cntIdx].name}`);
+        qQuestions.push(
+          `Which currency is used in ${countries[cntIdx].name.common}`
+        );
       }
       if (i === 4) {
-        qQuestions.push(`Which region does ${countries[cntIdx].name} locate`);
+        qQuestions.push(
+          `Which region does ${countries[cntIdx].name.common} locate at`
+        );
       }
     }
     setQuizQuestions(qQuestions);
@@ -93,13 +96,16 @@ export const AppProvider = ({ children }) => {
 
     if (questionIdx === 0 || questionIdx === 2) {
       propertyName = "name";
-      correctOption = currentCountry.name;
+      correctOption = currentCountry.name.common;
     } else if (questionIdx === 1) {
       propertyName = "language";
-      correctOption = currentCountry.languages[0].name;
+      correctOption =
+        currentCountry.languages[Object.keys(currentCountry.languages)[0]];
     } else if (questionIdx === 3) {
       propertyName = "currency";
-      correctOption = currentCountry.currencies[0].code;
+      correctOption =
+        currentCountry.currencies[Object.keys(currentCountry.currencies)[0]]
+          .symbol;
     } else if (questionIdx === 4) {
       propertyName = "region";
       correctOption = currentCountry.region;
@@ -127,11 +133,17 @@ export const AppProvider = ({ children }) => {
         if (rndCountries.indexOf(rndIdx) === -1 && rndIdx !== currentCntIdx) {
           let rndCntOpVal = "";
           if (propName === "name") {
-            rndCntOpVal = countries[rndIdx].name;
+            rndCntOpVal = countries[rndIdx].name.common;
           } else if (propName === "language") {
-            rndCntOpVal = countries[rndIdx].languages[0].name;
+            rndCntOpVal =
+              countries[rndIdx].languages[
+                Object.keys(countries[rndIdx].languages)[0]
+              ];
           } else if (propName === "currency") {
-            rndCntOpVal = countries[rndIdx].currencies[0].code;
+            rndCntOpVal =
+              countries[rndIdx].currencies[
+                Object.keys(countries[rndIdx].currencies)[0]
+              ].symbol;
           } else if (propName === "region") {
             rndCntOpVal = countries[rndIdx].region;
           }
